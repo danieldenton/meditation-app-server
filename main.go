@@ -1,11 +1,13 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"os"
 
 	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
 )
 
 func init() {
@@ -16,6 +18,20 @@ func init() {
 }
 
 func main() {
-	postgres_secret := os.Getenv("POSTGRES_SECRET")
-	connStr := fmt.Sprintf("postgres://postgres:%s@localhost:5432/meditaiondb?sslmode=disable", postgres_secret)
+	postgres_secret := os.Getenv("POSTGRES_PASSWORD")
+
+	connStr := fmt.Sprintf("postgres://postgres:%s@localhost:5432/meditationdb?sslmode=disable", postgres_secret)
+
+	db, err := sql.Open("postgres", connStr)
+
+	defer db.Close()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err = db.Ping(); err != nil {
+		log.Fatal(err)
+	}
+
 }
