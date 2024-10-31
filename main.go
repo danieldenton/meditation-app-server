@@ -53,17 +53,18 @@ func main() {
 
 	qyery := `SELECT uid, first_name, last_name, email FROM users WHERE id = $1`
 	err = db.QueryRow(qyery, pk).Scan(&uid, &firstName, &lastName, &email)
-	
+
 	if err != nil {
 		if err == sql.ErrNoRows {
 			log.Println("No rows were returned")
 		}
 		log.Fatal(err)
 
-	fmt.Println("UID:", uid)
-	fmt.Println("First Name:", firstName)
-	fmt.Println("Last Name:", lastName)
-	fmt.Println("Email:", email)
+		fmt.Println("UID:", uid)
+		fmt.Println("First Name:", firstName)
+		fmt.Println("Last Name:", lastName)
+		fmt.Println("Email:", email)
+	}
 }
 
 func createProductionTable(db *sql.DB) {
