@@ -46,7 +46,17 @@ func main() {
 	user := User{"HFbwu4jiaLMxEjC8nMarOjJ55Ou2", "Daniel", "Denton", "danieldentondev@gmail.com"}
 	pk := insertUser(db, user)
 
-	fmt.Println("User created with id:", pk)
+	var uid string
+	var firstName string
+	var lastName string
+	var email string
+
+	qyery := `SELECT uid, first_name, last_name, email FROM users WHERE id = $1`
+	err = db.QueryRow(qyery, pk).Scan(&uid, &firstName, &lastName, &email)
+	fmt.Println("UID:", uid)
+	fmt.Println("First Name:", firstName)
+	fmt.Println("Last Name:", lastName)
+	fmt.Println("Email:", email)
 }
 
 func createProductionTable(db *sql.DB) {
