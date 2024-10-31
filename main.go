@@ -43,28 +43,50 @@ func main() {
 
 	createProductionTable(db)
 
-	user := User{"HFbwu4jiaLMxEjC8nMarOjJ55Ou2", "Daniel", "Denton", "danieldentondev@gmail.com"}
-	pk := insertUser(db, user)
+	data := []User{}
+	rows, err := db.Query("SELECT first_name, last_name, email FROM users")
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	var uid string
+	defer rows.Close()
+
 	var firstName string
 	var lastName string
 	var email string
 
-	qyery := `SELECT uid, first_name, last_name, email FROM users WHERE id = $1`
-	err = db.QueryRow(qyery, pk).Scan(&uid, &firstName, &lastName, &email)
-
-	if err != nil {
-		if err == sql.ErrNoRows {
-			log.Println("No rows were returned")
+	for rows.Next() {
+		err := rows.Scan(&firstName, &lastName, &email)
+		if err != nil {
+			log.Fatal(err)
 		}
-		log.Fatal(err)
 
-		fmt.Println("UID:", uid)
-		fmt.Println("First Name:", firstName)
-		fmt.Println("Last Name:", lastName)
-		fmt.Println("Email:", email)
+		data = append(data, User{FirstName: firstName, LastName: lastName, Email: email})
+		fmt.Println(data)
 	}
+
+	// user := User{"HFbwu4jiaLMxEjC8nMarOjJ55Ou2", "Daniel", "Denton", "danieldentondev@gmail.com"}
+	// pk := insertUser(db, user)
+
+	// var uid string
+	// var firstName string
+	// var lastName string
+	// var email string
+
+	// qyery := `SELECT uid, first_name, last_name, email FROM users WHERE id = $1`
+	// err = db.QueryRow(qyery, pk).Scan(&uid, &firstName, &lastName, &email)
+
+	// if err != nil {
+	// 	if err == sql.ErrNoRows {
+	// 		log.Println("No rows were returned")
+	// 	}
+	// 	log.Fatal(err)
+
+	// 	fmt.Println("UID:", uid)
+	// 	fmt.Println("First Name:", firstName)
+	// 	fmt.Println("Last Name:", lastName)
+	// 	fmt.Println("Email:", email)
+	// }
 }
 
 func createProductionTable(db *sql.DB) {
