@@ -3,6 +3,7 @@ package databse
 import (
 	"fmt"
 	"log"
+	"main/models"
 	"os"
 
 	"gorm.io/driver/postgres"
@@ -35,4 +36,11 @@ func ConnectDB() {
 
 	log.Println("Connected to database")
 	db.Logger = logger.Default.LogMode(logger.Info)
+
+	log.Println("Migrating the schema")
+	db.AutoMigrate(&models.User{})
+
+	DB = DBinstance{
+		DB: db,
+	}
 }
