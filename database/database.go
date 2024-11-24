@@ -3,9 +3,9 @@ package databse
 import (
 	"fmt"
 	"log"
-	"main/models"
 	"os"
 
+	"github.com/danieldenton/meditation-app-server/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
