@@ -1,16 +1,14 @@
 # syntax=docker/dockerfile:1
 
-FROM golang:1.21.1-alpine
+FROM golang:1.23-alpine
 
 WORKDIR /app
 
-COPY go.* ./
-
-RUN go mod download
+RUN go install github.com/air-verse/air@latest
 
 COPY . .
 
-RUN go build -o main main.go
+RUN go mod tidy
 
 EXPOSE 8080
 
