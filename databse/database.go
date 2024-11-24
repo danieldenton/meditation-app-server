@@ -2,6 +2,7 @@ package databse
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"gorm.io/driver/postgres"
@@ -22,7 +23,16 @@ func ConnectDB() {
 		os.Getenv("DB_PASSWORD"),
 		os.Getenv("DB_NAME"),
 	)
-	gorm.Open(postgres.Open(dsn), &gorm.Config{
+
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})
+
+	if err != nil {
+		log.Fatal("Failed to connect to database. \n", err)
+		os.Exit(2)
+	}
+
+	log.Println("Connected to database")
+	db.Logger = logger.Default.LogMode(logger.Info)
 }
